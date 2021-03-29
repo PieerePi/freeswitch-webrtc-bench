@@ -1,0 +1,5 @@
+.vscode
+vendor
+freeswitch-webrtc-bench*
+*.log
+*.json
