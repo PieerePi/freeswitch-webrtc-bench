@@ -1,0 +1,38 @@
+{
+    "logtype": "console",
+    "logdir": "logs",
+    "calldetailsinlog": false,
+    "calldetailsfile": true,
+    "sdpincalldetails": true,
+
+    "localip": "0.0.0.0",
+    "localports": "0",
+    "transport": "wss",
+
+    "serverip": "192.168.100.205",
+    "serverport": "7443",
+    "iceurls": "turn:192.168.100.205:3478",
+    "iceusername": "your_ice_username",
+    "icecredential": "your_ice_password",
+
+    "role": "uas",
+    "accounts": "3850,3851-3889",
+    "passwords": "12aa34zz{40}",
+    "calledparties": "",
+
+    "maxconcurrentcalls": 10,
+    "totalcalls": 20,
+    "callduration": 0,
+    "callsperbatch": 0,
+    "batchinterval": 0,
+    "callinterval": 0,
+
+    "mediatype": "video",
+    "audiofile": "examples/tea_audio.g711u",
+    "videofile": "examples/tea_video.h264",
+    "videofilefps": 25,
+
+    "dumpmedia": true,
+    "savedaudiofile": "dump_uas_audio",
+    "savedvideofile": "dump_uas_video"
+}
