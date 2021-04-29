@@ -614,6 +614,19 @@ func MediaFunc(ctx context.Context, cp *profile.CallProfile, sdpToUAChan chan<- 
 			case <-ctx.Done():
 				return nil
 			case remoteAnswer = <-sdpFromUAChan:
+				// Prefer video
+				if strings.Index(remoteAnswer.SDP, "m=video") != -1 {
+					audioStart := strings.Index(remoteAnswer.SDP, "m=audio")
+					videoStart := strings.Index(remoteAnswer.SDP, "m=video")
+					// Remove audio section
+					if audioStart != -1 {
+						if audioStart < videoStart {
+							remoteAnswer.SDP = remoteAnswer.SDP[0:audioStart] + remoteAnswer.SDP[videoStart:]
+						} else {
+							remoteAnswer.SDP = remoteAnswer.SDP[0:audioStart]
+						}
+					}
+				}
 				// Insert a=sendrecv
 				remoteAnswer.SDP = remoteAnswer.SDP + "a=sendrecv\r\n"
 				// Insert a=mid:0
