@@ -145,7 +145,7 @@ func ParseCallProfile(filename string, cp *CallProfile) error {
 	if cp.InternalLocalPorts, err = parseRangePattern(cp.LocalPorts); err != nil {
 		return fmt.Errorf("ParseCallProfile parse localports error: %v", err)
 	}
-	if len(cp.InternalAccounts) == 0 || len(cp.InternalAccounts) != len(cp.InternalPasswords) || (cp.Role == "uac" && len(cp.InternalAccounts) != len(cp.InternalCalledParties)) || len(cp.InternalAccounts) != len(cp.InternalLocalPorts) {
+	if len(cp.InternalAccounts) == 0 || len(cp.InternalAccounts) > len(cp.InternalPasswords) || (cp.Role == "uac" && len(cp.InternalAccounts) > len(cp.InternalCalledParties)) || len(cp.InternalAccounts) > len(cp.InternalLocalPorts) {
 		return fmt.Errorf("ParseCallProfile localports-%d/accounts-%d/passwords-%d/calledparties-%d of unequal length",
 			len(cp.InternalLocalPorts), len(cp.InternalAccounts), len(cp.InternalPasswords), len(cp.InternalCalledParties))
 	}
