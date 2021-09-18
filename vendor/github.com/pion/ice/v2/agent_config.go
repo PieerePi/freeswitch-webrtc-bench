@@ -10,7 +10,8 @@ import (
 
 const (
 	// defaultCheckInterval is the interval at which the agent performs candidate checks in the connecting phase
-	defaultCheckInterval = 200 * time.Millisecond
+	// like chrome
+	defaultCheckInterval = 50 * time.Millisecond
 
 	// keepaliveInterval used to keep candidates alive
 	defaultKeepaliveInterval = 2 * time.Second

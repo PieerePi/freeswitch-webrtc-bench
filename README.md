@@ -152,19 +152,15 @@ index 745182d..cd7249d 100644
 
 ## Limits
 
-- Only supports one mdia
+- Only supports one media
   - Since FreeSWITCH doesn't support bundled media, and pion/webrtc doesn't support unbundled media, so there is only one media in a call, either audio or video, you can specify it by setting the mediatype parameter in the call profile.
 
-- Audio call is not supported
-  - Audio call cannot be successfully established at present. That might be FreeSWITCH's problem (TODO).
+- Audio call is not fully supported
+  - Audio call can be established now; but if remote party rejects us with 603 Decline, FreeSWITCH won't hang up us.
+  - The remote party cannot hear us, because FreeSWITCH doesn't pass our media to the remote party; but we can hear the remote party.
 
 - Call without TURN enabled is not supported
   - UAS ICE state failed if TURN is not enabled. That might be pion's problem (TODO).
-
-- Only supports H264
-  - H264 video file ends with .h264 suffix.
-  - G711U audio file ends with .g711 suffix. (not supported because audio call is not supported)
-  - OPUS audio file ends with .ogg suffix. (not supported because audio call is not supported)
 
 ## Acknowledgement
 

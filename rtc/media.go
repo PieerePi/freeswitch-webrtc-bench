@@ -208,7 +208,13 @@ func MediaFunc(ctx context.Context, cp *profile.CallProfile, sdpToUAChan chan<- 
 			registry.Add(vIngester.markerInterceptor)
 		}
 
-		api := webrtc.NewAPI(webrtc.WithMediaEngine(m), webrtc.WithInterceptorRegistry(registry))
+		s := webrtc.SettingEngine{}
+		// nominate CandidateTypeRelay pair at once
+		s.SetRelayAcceptanceMinWait(0 * time.Millisecond)
+		// set binding request refresh interval to 1 second like FreeSWITCH
+		s.SetICETimeouts(5*time.Second, 25*time.Second, 1*time.Second)
+		api := webrtc.NewAPI(webrtc.WithMediaEngine(m), webrtc.WithSettingEngine(s), webrtc.WithInterceptorRegistry(registry))
+
 		return api.NewPeerConnection(configuration)
 	}
 

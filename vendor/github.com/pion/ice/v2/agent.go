@@ -476,6 +476,7 @@ func (a *Agent) startConnectivityChecks(isControlling bool, remoteUfrag, remoteP
 func (a *Agent) connectivityChecks() {
 	lastConnectionState := ConnectionState(0)
 	checkingDuration := time.Time{}
+	firstChecks := 2
 
 	contact := func() {
 		if err := a.run(a.context(), func(ctx context.Context, a *Agent) {
@@ -526,6 +527,11 @@ func (a *Agent) connectivityChecks() {
 		// Ensure we run our task loop as quickly as the minimum of our various configured timeouts
 		updateInterval(a.disconnectedTimeout)
 		updateInterval(a.failedTimeout)
+
+		if (lastConnectionState == ConnectionStateConnected) && (firstChecks > 0) {
+			firstChecks--
+			updateInterval(a.checkInterval)
+		}
 
 		t := time.NewTimer(interval)
 		select {
@@ -630,7 +636,9 @@ func (a *Agent) getBestAvailableCandidatePair() *candidatePair {
 func (a *Agent) getBestValidCandidatePair() *candidatePair {
 	var best *candidatePair
 	for _, p := range a.checklist {
-		if p.state != CandidatePairStateSucceeded {
+		// if we are controlling, pick one as use-candidate to accelerate the process
+		if p.state != CandidatePairStateSucceeded && !a.isControlling {
+			// if p.state != CandidatePairStateSucceeded {
 			continue
 		}
 
@@ -695,9 +703,11 @@ func (a *Agent) checkKeepalive() {
 		return
 	}
 
-	if (a.keepaliveInterval != 0) &&
-		((time.Since(selectedPair.local.LastSent()) > a.keepaliveInterval) ||
-			(time.Since(selectedPair.remote.LastReceived()) > a.keepaliveInterval)) {
+	// send keepalive always
+	if a.keepaliveInterval != 0 {
+		// if (a.keepaliveInterval != 0) &&
+		// 	((time.Since(selectedPair.local.LastSent()) > a.keepaliveInterval) ||
+		// 		(time.Since(selectedPair.remote.LastReceived()) > a.keepaliveInterval)) {
 		// we use binding request instead of indication to support refresh consent schemas
 		// see https://tools.ietf.org/html/rfc7675
 		a.selector.PingCandidate(selectedPair.local, selectedPair.remote)

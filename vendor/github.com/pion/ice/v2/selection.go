@@ -146,6 +146,8 @@ func (s *controllingSelector) HandleSuccessResponse(m *stun.Message, local, remo
 func (s *controllingSelector) PingCandidate(local, remote Candidate) {
 	msg, err := stun.Build(stun.BindingRequest, stun.TransactionID,
 		stun.NewUsername(s.agent.remoteUfrag+":"+s.agent.localUfrag),
+		// add UseCandidate always because we nominate pair first
+		UseCandidate(),
 		AttrControlling(s.agent.tieBreaker),
 		PriorityAttr(local.Priority()),
 		stun.NewShortTermIntegrity(s.agent.remotePwd),
@@ -261,6 +263,12 @@ func (s *controlledSelector) HandleBindingRequest(m *stun.Message, local, remote
 			// MUST remove the candidate pair from the valid list, set the
 			// candidate pair state to Failed, and set the checklist state to
 			// Failed.
+			// if we are controlled, accept use-candidate at once to accelerate the process
+			p.state = CandidatePairStateSucceeded
+			if selectedPair := s.agent.getSelectedPair(); selectedPair == nil {
+				s.agent.setSelectedPair(p)
+			}
+			s.agent.sendBindingSuccess(m, local, remote)
 			s.PingCandidate(local, remote)
 		}
 	} else {
