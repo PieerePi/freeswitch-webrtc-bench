@@ -95,10 +95,6 @@ type CallProfile struct {
 	CallsPerBatch int `json:"callsperbatch"`
 	// interval between every batch, unit is millisecond; similar to '-rp' of sipp
 	BatchInterval int `json:"batchinterval"`
-	// interval between every call, unit is millisecond
-	//
-	// callinterval * callsperbatch <= batchinterval
-	CallInterval int `json:"callinterval"`
 
 	// "audio" or "video" for uac
 	//

@@ -209,9 +209,8 @@ uacmainloop:
 			startedCalls++
 			j++
 			j %= cp.MaxConcurrentCalls
-			time.Sleep(time.Duration(cp.CallInterval) * time.Millisecond)
+			time.Sleep(time.Duration(cp.BatchInterval/cp.CallsPerBatch) * time.Millisecond)
 		}
-		time.Sleep(time.Duration(cp.BatchInterval-cp.CallInterval*cp.CallsPerBatch) * time.Millisecond)
 	}
 
 	log.Println("Wait for UACs to exit...")

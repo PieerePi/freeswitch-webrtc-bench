@@ -25,7 +25,6 @@
     "callduration": 0,
     "callsperbatch": 0,
     "batchinterval": 0,
-    "callinterval": 0,
 
     "mediatype": "video",
     "audiofile": "examples/tea_audio.g711u",

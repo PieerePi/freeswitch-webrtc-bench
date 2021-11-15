@@ -88,10 +88,6 @@ type CallProfile struct {
 	CallsPerBatch int `json:"callsperbatch"`
 	// interval between every batch, unit is millisecond; similar to '-rp' of sipp
 	BatchInterval int `json:"batchinterval"`
-	// interval between every call, unit is millisecond
-	//
-	// callinterval * callsperbatch <= batchinterval
-	CallInterval int `json:"callinterval"`
 
 	// "audio" or "video" for uac
 	//
@@ -168,9 +164,6 @@ func ParseCallProfile(filename string, cp *CallProfile) error {
 	if cp.TotalCalls > 0 && cp.TotalCalls < cp.MaxConcurrentCalls {
 		// don't start to many clients (uac/uas)
 		cp.MaxConcurrentCalls = cp.TotalCalls
-	}
-	if cp.CallInterval*cp.CallsPerBatch > cp.BatchInterval {
-		return fmt.Errorf("ParseCallProfile, %d(callinterval)*%d(callsperbatch)=%d should be <= %d(batchinterval)", cp.CallInterval, cp.CallsPerBatch, cp.CallInterval*cp.CallsPerBatch, cp.BatchInterval)
 	}
 	if cp.Role == "uac" {
 		if cp.MediaType != "audio" && cp.MediaType != "video" {

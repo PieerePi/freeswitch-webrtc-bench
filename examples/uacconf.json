@@ -25,7 +25,6 @@
     "callduration": 30000,
     "callsperbatch": 20,
     "batchinterval": 1000,
-    "callinterval": 50,
 
     "mediatype": "video",
     "audiofile": "examples/tea_audio.g711u",
